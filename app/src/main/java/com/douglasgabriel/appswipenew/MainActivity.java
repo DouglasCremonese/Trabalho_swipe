@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,37 +55,66 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 super.onSwipeLeft();
-                muda();
+                if((sim + nao) ==5){
+                    resposta();
+                }else{
+                    muda();
+                    tvSwipe.setText(lista.toArray()[cont].toString());}
             }
 
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-                cont = cont - 1;
-                if (cont == -1) {
-                    cont = lista.size() - 1;
+                if((sim+nao) == 5){
+                    resposta();
                 }
-                tvSwipe.setText(lista.toArray()[cont].toString());
+                else{
+                    volta();
+                    tvSwipe.setText(lista.toArray()[cont].toString());}
             }
         });
     }
-    public void muda(){
+    public int muda(){
         cont = cont + 1;
-        if(cont == lista.size()){
+        if(cont >= lista.size()){
             cont = 0;
         }
-        tvSwipe.setText(lista.toArray()[cont].toString());
+        //tvSwipe.setText(lista.toArray()[cont].toString());
+        return cont;
+    }
+
+    public int volta(){
+        cont = cont - 1;
+        if (cont == -1) {
+            cont = lista.size() - 1;
+        }
+        //tvSwipe.setText(lista.toArray()[cont].toString());
+        return cont;
     }
 
     public void resposta(){
         if(lista.size() > 1){
-            muda();
             lista.remove(cont);
+            muda();
+            tvSwipe.setText(lista.toArray()[cont].toString());
+
         }
         else{
-            tvSim.setText("");
-            tvNao.setText("");
-            tvSwipe.setText("Sim: "+sim+"\n Não: "+nao);
+            tvSim.setText("Reset");
+            tvNao.setText("Reset");
+            if((sim + nao) == 5){
+                tvSwipe.setText("Sim: "+sim+"\n Não: "+nao);
+            }
+            else{
+                sim = 0;
+                nao = 0;
+                lista = new ArrayList<String>(Arrays.asList(perguntas));
+                cont = 0;
+                tvSim.setText("Sim");
+                tvNao.setText("Não");
+                tvSwipe.setText(lista.toArray()[cont].toString());
+
+            }
         }
     }
 }
